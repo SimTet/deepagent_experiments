@@ -1,10 +1,9 @@
 from typing import Literal
 
+from config import settings
 from deepagents import create_deep_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
 from tavily import TavilyClient
-
-from config import settings
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
@@ -165,6 +164,7 @@ Use this to run an internet search for a given query. You can specify the number
 
 # Create the agent
 agent = create_deep_agent(
+    model=llm,
     tools=[internet_search],
     system_prompt=research_instructions,
     subagents=[critique_sub_agent, research_sub_agent],
