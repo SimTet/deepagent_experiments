@@ -1,0 +1,18 @@
+[project]
+name = "deepagent-experiments"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "deepagents>=0.2.7",
+    "langchain-google-genai>=3.0.3",
+    "pydantic>=2.12.4",
+    "pydantic-settings>=2.12.0",
+    "tavily-python>=0.7.13",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]
