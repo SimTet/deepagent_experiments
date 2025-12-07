@@ -18,8 +18,8 @@ from examples.research_agent.prompts.prompts import (
 from examples.research_agent.tools.tools import tavily_search, think_tool
 
 # Limits
-max_concurrent_research_units = 3
-max_researcher_iterations = 3
+max_concurrent_research_units = settings.MAX_CONCURRENT_RESEARCH_UNITS
+max_researcher_iterations = settings.MAX_RESEARCHER_ITERATIONS
 
 # Get current date
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -37,7 +37,7 @@ INSTRUCTIONS = (
 )
 
 # Initialize the language model
-model = ChatGoogleGenerativeAI(model=settings.GOOGLE_MODEL_NAME, temperature=0.0)
+model = ChatGoogleGenerativeAI(model=settings.GOOGLE_MODEL_NAME, temperature=settings.TEMPERATURE)
 
 # Create research sub-agent
 research_sub_agent = {

@@ -65,6 +65,9 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# Langgraph stuff:
+.langgraph_api
+
 # Scrapy stuff:
 .scrapy
 
