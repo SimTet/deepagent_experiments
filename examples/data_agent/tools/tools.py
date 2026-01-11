@@ -1,8 +1,7 @@
 """Data analysis tools for SQL querying, schema exploration, and visualization."""
 
-import base64
-import io
 import sqlite3
+import uuid
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -11,7 +10,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from langchain_core.tools import tool
 
-matplotlib.use("Agg")  # Non-interactive backend for server environments
+matplotlib.use("Agg")  # Non-interactive backend to prevent immediate display
+
+# Directory for saved charts
+CHARTS_DIR = Path(__file__).parent.parent / "charts"
+CHARTS_DIR.mkdir(exist_ok=True)
 
 # Default database path
 DEFAULT_DB_PATH = Path(__file__).parent.parent / "data" / "sample.db"
@@ -50,6 +53,8 @@ def explore_schema(table_name: Optional[str] = None) -> str:
             tables = [row[0] for row in cursor.fetchall()]
 
             result = "## Available Tables\n\n"
+            relationships = []
+
             for table in tables:
                 cursor.execute(f"PRAGMA table_info({table})")
                 columns = cursor.fetchall()
@@ -60,8 +65,24 @@ def explore_schema(table_name: Optional[str] = None) -> str:
                 for col in columns:
                     pk = " (PRIMARY KEY)" if col[5] else ""
                     nullable = "" if col[3] else " NOT NULL"
-                    result += f"- {col[1]}: {col[2]}{pk}{nullable}\n"
+                    col_name = col[1]
+                    # Detect foreign key patterns (columns ending with _id)
+                    fk_hint = ""
+                    if col_name.endswith("_id") and not col[5]:  # ends with _id and not primary key
+                        # Infer referenced table from column name
+                        ref_table = col_name[:-3] + "s"  # e.g., department_id -> departments
+                        if ref_table in tables:
+                            fk_hint = f" -> JOIN with {ref_table}"
+                            relationships.append(f"{table}.{col_name} -> {ref_table}.id")
+                    result += f"- {col_name}: {col[2]}{pk}{nullable}{fk_hint}\n"
                 result += "\n"
+
+            if relationships:
+                result += "## Relationships (for JOINs)\n\n"
+                for rel in relationships:
+                    result += f"- {rel}\n"
+                result += "\n**Tip:** Use JOINs to get names instead of IDs, e.g.:\n"
+                result += "`SELECT d.name, AVG(e.salary) FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name`\n"
 
             return result
         else:
@@ -199,7 +220,7 @@ def create_chart(
     """Create a visualization chart from SQL query results.
 
     Execute a SQL query and visualize the results as a chart.
-    The chart is returned as a base64-encoded PNG image.
+    The chart is displayed directly in the notebook.
 
     Args:
         sql_query: SQL SELECT query to get data for visualization.
@@ -210,7 +231,7 @@ def create_chart(
         color_column: Optional column for color grouping (bar/scatter charts).
 
     Returns:
-        Success message with base64-encoded PNG image that can be displayed.
+        Success message describing the chart that was displayed.
     """
     # Validate query
     normalized = sql_query.strip().upper()
@@ -238,7 +259,7 @@ def create_chart(
             return f"Error: Column '{y_col}' not found. Available: {list(df.columns)}"
 
         # Create figure
-        fig, ax = plt.subplots(figsize=(10, 6))
+        _, ax = plt.subplots(figsize=(10, 6))
 
         chart_title = title or f"{chart_type.title()} Chart: {y_col} by {x_col}"
 
@@ -278,14 +299,25 @@ def create_chart(
 
         plt.tight_layout()
 
-        # Save to base64
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format="png", dpi=150, bbox_inches="tight")
-        buffer.seek(0)
-        img_base64 = base64.b64encode(buffer.read()).decode("utf-8")
-        plt.close(fig)
+        # Save chart to file
+        chart_id = str(uuid.uuid4())[:8]
+        chart_filename = f"chart_{chart_id}.png"
+        chart_path = CHARTS_DIR / chart_filename
+        plt.savefig(chart_path, format="png", dpi=150, bbox_inches="tight")
+        plt.close()
 
-        return f"Chart created successfully.\n\n![{chart_title}](data:image/png;base64,{img_base64})"
+        # Build summary for LLM with special marker for display
+        summary = f"Chart saved successfully: {chart_title}\n"
+        summary += f"- Chart type: {chart_type}\n"
+        summary += f"- Data points: {len(df)}\n"
+        if chart_type != "histogram":
+            summary += f"- X-axis: {x_col}\n"
+            summary += f"- Y-axis: {y_col}\n"
+        else:
+            summary += f"- Variable: {x_col}\n"
+        summary += f"\n[CHART:{chart_path}]"
+
+        return summary
 
     except Exception as e:
         plt.close("all")

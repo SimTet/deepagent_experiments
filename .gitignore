@@ -68,6 +68,9 @@ instance/
 # Langgraph stuff:
 .langgraph_api
 
+# Generated charts
+examples/data_agent/charts/
+
 # Scrapy stuff:
 .scrapy
 

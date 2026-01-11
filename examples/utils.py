@@ -1,12 +1,39 @@
 """Utility functions for displaying messages and prompts in Jupyter notebooks."""
 
 import json
+import re
+from pathlib import Path
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
 console = Console()
+
+
+def extract_chart_path(text: str) -> tuple[str, Path | None]:
+    """Extract chart path from text and return cleaned text with optional chart path."""
+    chart_pattern = r"\[CHART:([^\]]+)\]"
+    match = re.search(chart_pattern, text)
+
+    chart_path = None
+    if match:
+        chart_path = Path(match.group(1))
+        if not chart_path.exists():
+            chart_path = None
+        # Remove the marker from the text
+        text = re.sub(chart_pattern, "", text).strip()
+
+    return text, chart_path
+
+
+def display_chart(chart_path: Path) -> None:
+    """Display a chart image in Jupyter notebook."""
+    try:
+        from IPython.display import Image, display
+        display(Image(filename=str(chart_path)))
+    except ImportError:
+        pass  # Not in Jupyter environment
 
 
 def format_message_content(message):
@@ -56,7 +83,11 @@ def format_messages(messages):
         elif msg_type == "Ai":
             console.print(Panel(content, title="🤖 Assistant", border_style="green"))
         elif msg_type == "Tool":
-            console.print(Panel(content, title="🔧 Tool Output", border_style="yellow"))
+            # Check for chart markers and display charts after the panel
+            cleaned_content, chart_path = extract_chart_path(content)
+            console.print(Panel(cleaned_content, title="🔧 Tool Output", border_style="yellow"))
+            if chart_path:
+                display_chart(chart_path)
         else:
             console.print(Panel(content, title=f"📝 {msg_type}", border_style="white"))
 
