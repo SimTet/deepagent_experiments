@@ -20,13 +20,18 @@ def format_message_content(message):
     elif isinstance(message.content, list):
         # Handle complex content like tool calls (Anthropic format)
         for item in message.content:
-            if item.get("type") == "text":
-                parts.append(item["text"])
-            elif item.get("type") == "tool_use":
-                parts.append(f"\n🔧 Tool Call: {item['name']}")
-                parts.append(f"   Args: {json.dumps(item['input'], indent=2)}")
-                parts.append(f"   ID: {item.get('id', 'N/A')}")
-                tool_calls_processed = True
+            if isinstance(item, str):
+                parts.append(item)
+            elif isinstance(item, dict):
+                if item.get("type") == "text":
+                    parts.append(item["text"])
+                elif item.get("type") == "tool_use":
+                    parts.append(f"\n🔧 Tool Call: {item['name']}")
+                    parts.append(f"   Args: {json.dumps(item['input'], indent=2)}")
+                    parts.append(f"   ID: {item.get('id', 'N/A')}")
+                    tool_calls_processed = True
+            else:
+                parts.append(str(item))
     else:
         parts.append(str(message.content))
 
