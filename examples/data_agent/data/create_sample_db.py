@@ -121,10 +121,10 @@ def create_sample_db():
     conn.close()
     print(f"Sample database created at {DB_PATH}")
     print("Tables created: departments, employees, products, sales")
-    print(f"  - 5 departments")
-    print(f"  - 50 employees")
-    print(f"  - 10 products")
-    print(f"  - 500 sales transactions")
+    print("  - 5 departments")
+    print("  - 50 employees")
+    print("  - 10 products")
+    print("  - 500 sales transactions")
 
 
 if __name__ == "__main__":

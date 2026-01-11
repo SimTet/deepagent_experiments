@@ -44,4 +44,4 @@ def divide_floats(a: float, b: float) -> str:
         return "Error: Division by zero is not allowed. The denominator must be non-zero."
 
     result = a / b
-    return f"{result}"
+    return str(result)

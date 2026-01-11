@@ -1,0 +1,23 @@
+{
+  "epics": {
+    "EPIC-001": {
+      "title": "ML-Powered Real-time Fraud Detection System",
+      "priority": "High",
+      "status": "Draft",
+      "file": "EPIC-001_ml_powered_real_time_fraud_detection_system.md",
+      "stories": [],
+      "created": "2026-01-11T19:37:21.441595"
+    },
+    "EPIC-002": {
+      "title": "ML-Powered Real-time Fraud Detection System",
+      "priority": "High",
+      "status": "Draft",
+      "file": "EPIC-002_ml_powered_real_time_fraud_detection_system.md",
+      "stories": [],
+      "created": "2026-01-11T19:37:29.001143"
+    }
+  },
+  "stories": {},
+  "created": "2026-01-11T19:37:21.441590",
+  "updated": "2026-01-11T19:37:29.001149"
+}

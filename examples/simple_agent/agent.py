@@ -2,6 +2,11 @@
 
 This module creates a simple agent with basic utility tools to demonstrate
 tool usage in the deepagents framework.
+
+This is intentionally minimal to show the basics. Note that create_deep_agent
+automatically provides additional native tools (write_file, read_file,
+write_todos, etc.) - see data_agent and requirements_agent for examples
+leveraging these features.
 """
 
 from deepagents import create_deep_agent
