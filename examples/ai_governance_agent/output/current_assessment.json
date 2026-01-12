@@ -1,0 +1,33 @@
+{
+  "created": "2026-01-12T22:57:58.393534",
+  "status": "in_progress",
+  "answers": {
+    "Q1.1": {
+      "answer": "Customer Churn Prediction Model",
+      "notes": null,
+      "timestamp": "2026-01-12T22:58:23.751948"
+    },
+    "Q1.2": {
+      "answer": "ML model that analyzes customer behavior data to predict likelihood of churn within 30 days",
+      "notes": null,
+      "timestamp": "2026-01-12T22:58:25.313309"
+    },
+    "Q1.3": {
+      "answer": "Sarah Johnson, VP of Sales",
+      "notes": null,
+      "timestamp": "2026-01-12T22:58:26.606083"
+    },
+    "Q1.4": {
+      "answer": "Mike Chen, Data Science Lead",
+      "notes": null,
+      "timestamp": "2026-01-12T22:58:27.965392"
+    },
+    "Q1.5": {
+      "answer": "Internal sales representatives and account managers",
+      "notes": null,
+      "timestamp": "2026-01-12T22:58:29.488708"
+    }
+  },
+  "metadata": {},
+  "updated": "2026-01-12T22:58:29.488713"
+}

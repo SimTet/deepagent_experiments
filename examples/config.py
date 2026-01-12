@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", env_file=".env", env_file_encoding="utf-8")
 
     TAVILY_API_KEY: str
     GOOGLE_API_KEY: str
