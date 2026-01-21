@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "ideation": "./examples/ai_ideation_agent/agent.py:agent"
+  },
+  "env": ".env"
+}
