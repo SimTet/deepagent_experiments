@@ -43,31 +43,78 @@ def format_message_content(message):
 
     # Handle main content
     if isinstance(message.content, str):
-        parts.append(message.content)
+        if message.content:  # Only add non-empty content
+            parts.append(message.content)
     elif isinstance(message.content, list):
         # Handle complex content like tool calls (Anthropic format)
         for item in message.content:
             if isinstance(item, str):
-                parts.append(item)
+                if item:  # Only add non-empty strings
+                    parts.append(item)
             elif isinstance(item, dict):
                 if item.get("type") == "text":
-                    parts.append(item["text"])
+                    text = item.get("text", "")
+                    if text:
+                        parts.append(text)
                 elif item.get("type") == "tool_use":
                     parts.append(f"\n🔧 Tool Call: {item['name']}")
-                    parts.append(f"   Args: {json.dumps(item['input'], indent=2)}")
+                    parts.append(f"   Args: {json.dumps(item.get('input', {}), indent=2)}")
                     parts.append(f"   ID: {item.get('id', 'N/A')}")
                     tool_calls_processed = True
             else:
                 parts.append(str(item))
-    else:
+    elif message.content is not None:
         parts.append(str(message.content))
 
-    # Handle tool calls attached to the message (OpenAI format) - only if not already processed
-    if not tool_calls_processed and hasattr(message, "tool_calls") and message.tool_calls:
-        for tool_call in message.tool_calls:
-            parts.append(f"\n🔧 Tool Call: {tool_call['name']}")
-            parts.append(f"   Args: {json.dumps(tool_call['args'], indent=2)}")
-            parts.append(f"   ID: {tool_call['id']}")
+    # Handle tool calls attached to the message (OpenAI/Gemini format)
+    # Check both message.tool_calls and additional_kwargs for compatibility
+    tool_calls = None
+    if not tool_calls_processed:
+        # Standard LangChain format
+        if hasattr(message, "tool_calls") and message.tool_calls:
+            tool_calls = message.tool_calls
+        # Gemini/Google format - check additional_kwargs
+        elif hasattr(message, "additional_kwargs"):
+            additional = message.additional_kwargs or {}
+            # Check for function_call (single call format)
+            if "function_call" in additional:
+                fc = additional["function_call"]
+                tool_calls = [{
+                    "name": fc.get("name", "unknown"),
+                    "args": json.loads(fc.get("arguments", "{}")) if isinstance(fc.get("arguments"), str) else fc.get("arguments", {}),
+                    "id": fc.get("id", "N/A"),
+                }]
+            # Check for tool_calls in additional_kwargs
+            elif "tool_calls" in additional:
+                tool_calls = additional["tool_calls"]
+
+    if tool_calls:
+        for tool_call in tool_calls:
+            # Handle both dict format and object format
+            if isinstance(tool_call, dict):
+                name = tool_call.get("name", "unknown")
+                args = tool_call.get("args", tool_call.get("arguments", {}))
+                tc_id = tool_call.get("id", "N/A")
+            else:
+                # Object format (e.g., ToolCall namedtuple or class)
+                name = getattr(tool_call, "name", "unknown")
+                args = getattr(tool_call, "args", getattr(tool_call, "arguments", {}))
+                tc_id = getattr(tool_call, "id", "N/A")
+
+            # Parse args if it's a JSON string
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except json.JSONDecodeError:
+                    pass
+
+            parts.append(f"\n🔧 Tool Call: {name}")
+            parts.append(f"   Args: {json.dumps(args, indent=2) if isinstance(args, dict) else str(args)}")
+            parts.append(f"   ID: {tc_id}")
+
+    # If no content and no tool calls, show placeholder
+    if not parts:
+        parts.append("(No content)")
 
     return "\n".join(parts)
 
