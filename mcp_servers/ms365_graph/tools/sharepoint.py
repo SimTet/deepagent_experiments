@@ -29,7 +29,8 @@ def register(mcp: FastMCP) -> None:
         ],
     ) -> dict:
         """Search for SharePoint sites by keyword."""
-        return await _get_client().get("/sites", params={"$search": search})
+        # Graph API uses 'search' (not '$search') for the sites endpoint.
+        return await _get_client().get("/sites", params={"search": search})
 
     @mcp.tool(tags={"sharepoint"})
     async def get_sharepoint_site(
@@ -147,13 +148,16 @@ def register(mcp: FastMCP) -> None:
         return await _get_client().get(f"/drives/{drive_id}/items/{item_id}")
 
     @mcp.tool(tags={"sharepoint", "onedrive"})
-    async def download_file_content(
+    async def get_file_download_url(
         drive_id: Annotated[str, Field(description="The drive ID")],
         item_id: Annotated[str, Field(description="The file item ID")],
     ) -> dict:
-        """Download the content of a file from OneDrive/SharePoint. Returns text content."""
+        """Get a pre-authenticated download URL for a file. The /content endpoint
+        returns a 302 redirect, so this fetches the item metadata with the
+        @microsoft.graph.downloadUrl property instead."""
         return await _get_client().get(
-            f"/drives/{drive_id}/items/{item_id}/content"
+            f"/drives/{drive_id}/items/{item_id}",
+            params={"$select": "id,name,size,@microsoft.graph.downloadUrl"},
         )
 
     @mcp.tool(tags={"sharepoint", "onedrive"})

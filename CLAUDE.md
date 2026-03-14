@@ -99,3 +99,10 @@ Settings are managed in `examples/config.py` using Pydantic Settings:
 - **requirements_agent**: Agile requirements engineering with epic/story creation
 - **project_kickoff_agent**: Multi-subagent orchestration (architect, task-planner, risk-assessor)
 - **ai_governance_agent**: Compliance assessment questionnaire workflow
+- **gemini_mcp_agent**: Gemini CLI headless mode with MCP server integration (settings.json config)
+
+## MCP Servers
+
+Reusable MCP servers live in `mcp_servers/`. Each server has its own directory with `server.py`, `requirements.txt`, and `README.md`.
+
+- **ms365_graph**: Microsoft 365 via Graph API (Outlook mail & calendar, Teams, SharePoint/OneDrive, user profiles). Python/FastMCP, 48 tools, BYOT auth via `MS365_ACCESS_TOKEN` env var. Includes JWT scope validation that disables tools the token can't support. See `scope_handling.md` for the full token lifecycle and architecture guide.

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ms365_graph": {
+      "command": "python",
+      "args": ["/workspace/mcp_servers/ms365_graph/server.py"],
+      "env": {
+        "MS365_ACCESS_TOKEN": "${MS365_ACCESS_TOKEN}"
+      }
+    }
+  }
+}

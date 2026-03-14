@@ -222,18 +222,18 @@ def register(mcp: FastMCP) -> None:
         duration_minutes: Annotated[
             int, Field(description="Meeting duration in minutes", ge=5)
         ] = 30,
-        timezone: Annotated[str, Field(description="IANA timezone")] = "UTC",
     ) -> dict:
-        """Find available meeting times for a set of attendees."""
-        body = {
+        """Find available meeting times for a set of attendees.
+        Only works with work/school accounts (not personal Microsoft accounts)."""
+        body: dict = {
             "attendees": [
-                {"emailAddress": {"address": addr}, "type": "required"}
+                {
+                    "type": "required",
+                    "emailAddress": {"address": addr, "name": ""},
+                }
                 for addr in attendees
             ],
             "meetingDuration": f"PT{duration_minutes}M",
-            "timeConstraint": {
-                "timeslots": [],
-            },
             "returnSuggestionReasons": True,
         }
         return await _get_client().post("/me/findMeetingTimes", body)

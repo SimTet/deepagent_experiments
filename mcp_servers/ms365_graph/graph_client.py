@@ -58,7 +58,7 @@ class GraphClient:
                 f"{GRAPH_BASE_URL}{path}", json=json_body, headers=hdrs
             )
             resp.raise_for_status()
-            if resp.status_code == 204:
+            if resp.status_code in (202, 204):
                 return {"status": "success"}
             if resp.headers.get("content-type", "").startswith("application/json"):
                 return resp.json()

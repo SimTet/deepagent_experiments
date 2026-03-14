@@ -92,12 +92,21 @@ print(result['access_token'])
 "
 ```
 
+## Scope Validation
+
+On startup, the server decodes the JWT access token's `scp` claim and disables any tools whose required Graph API scopes are missing. This prevents confusing 403 errors at runtime — the MCP client only sees tools the token can actually use.
+
+Example: a token with only `Mail.Read Calendars.Read User.Read` will have 37 tools disabled, leaving only the 11 read-only mail/calendar/user tools available.
+
+See [scope_handling.md](/scope_handling.md) in the project root for the full token lifecycle, refresh strategy, and architecture guide.
+
 ## Architecture
 
 ```
 ms365_graph/
-├── server.py           # FastMCP entry point, registers all tool modules
+├── server.py           # FastMCP entry point, registers tools & runs scope validation
 ├── graph_client.py     # Async HTTP client for Graph API (BYOT auth)
+├── scope_validator.py  # JWT scope decoder & tool gating logic
 ├── tools/
 │   ├── mail.py         # Outlook mail tools (9 tools)
 │   ├── calendar.py     # Outlook calendar tools (8 tools)
