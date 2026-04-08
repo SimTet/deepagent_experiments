@@ -1,0 +1,15 @@
+[project]
+name = "vertex-ai-search-mcp"
+version = "0.1.0"
+description = "MCP server for Vertex AI Search grounded Q&A"
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=3.0.0",
+    "google-cloud-discoveryengine>=0.13.0",
+    "google-genai>=1.0.0",
+    "pydantic>=2.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=73.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
