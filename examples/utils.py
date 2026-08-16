@@ -28,7 +28,7 @@ def extract_chart_path(text: str) -> tuple[str, Path | None]:
 
 
 def display_chart(chart_path: Path) -> None:
-    """Display a chart image in Jupyter notebook."""
+    """Display a chart image inline if running under IPython/Jupyter; no-op otherwise."""
     try:
         from IPython.display import Image, display
         display(Image(filename=str(chart_path)))

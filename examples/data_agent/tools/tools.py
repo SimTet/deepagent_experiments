@@ -220,7 +220,7 @@ def create_chart(
     """Create a visualization chart from SQL query results.
 
     Execute a SQL query and visualize the results as a chart.
-    The chart is displayed directly in the notebook.
+    The chart is saved as a PNG file and displayed inline where the runtime supports it.
 
     Args:
         sql_query: SQL SELECT query to get data for visualization.
