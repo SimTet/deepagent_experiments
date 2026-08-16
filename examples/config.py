@@ -1,5 +1,6 @@
 from pydantic import ConfigDict, field_validator
 from pydantic_settings import BaseSettings
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 class Settings(BaseSettings):
@@ -24,3 +25,12 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def create_gemini_model() -> ChatGoogleGenerativeAI:
+    """Build the Gemini client with credentials from the validated settings."""
+    return ChatGoogleGenerativeAI(
+        model=settings.GOOGLE_MODEL_NAME,
+        temperature=settings.TEMPERATURE,
+        google_api_key=settings.GOOGLE_API_KEY,
+    )

@@ -71,6 +71,10 @@ instance/
 # Generated charts
 examples/data_agent/charts/
 
+# Generated agent run artifacts (keep per-directory .gitkeep files)
+examples/*/output/*
+!examples/*/output/.gitkeep
+
 # Scrapy stuff:
 .scrapy
 

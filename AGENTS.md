@@ -20,7 +20,7 @@ cp .env_example .env
 
 ### Running Agents
 
-Each agent directory contains a `langgraph.json` for deployment via the LangGraph CLI:
+Each deployable agent directory contains a `langgraph.json` for deployment via the LangGraph CLI:
 
 ```bash
 # Run with LangGraph CLI (example for simple_agent), from the repo root
@@ -30,6 +30,11 @@ langgraph dev --config examples/simple_agent/langgraph.json
 Must be run from the repo root: the LangGraph CLI resolves `dependencies`/`graphs` paths in
 `langgraph.json` relative to the invoking shell's CWD, not the config file's own directory — `cd`ing
 into an example directory first breaks path resolution.
+
+The Python examples can also be started through their module entrypoints, for example
+`uv run python -m examples.data_agent`. These perform a real model invocation; use
+`uv run python -m unittest discover -s tests -v` for the credential-dummy, no-network
+graph-build smoke test.
 
 ## Architecture
 
@@ -83,7 +88,7 @@ Agents created with `create_deep_agent` automatically receive native tools inclu
 
 ## Configuration
 
-Settings are managed in `examples/config.py` using Pydantic Settings:
+Settings and the single credential-explicit Gemini model factory are managed in `examples/config.py`:
 - `GOOGLE_API_KEY` - Required for Gemini model
 - `TAVILY_API_KEY` - Required for web search
 - `GOOGLE_MODEL_NAME` - Defaults to "gemini-2.5-flash"
@@ -99,6 +104,8 @@ Settings are managed in `examples/config.py` using Pydantic Settings:
 - **requirements_agent**: Agile requirements engineering with epic/story creation
 - **project_kickoff_agent**: Multi-subagent orchestration (architect, task-planner, risk-assessor)
 - **ai_governance_agent**: Compliance assessment questionnaire workflow
+- **ai_ideation_agent**: AI use-case ideation with a compliance-advisor subagent
+- **gemini_langgraph_agent**: Minimal Gemini + DeepAgents wiring without a LangGraph deployment config
 - **gemini_mcp_agent**: Gemini CLI headless mode with MCP server integration (settings.json config)
 
 ## MCP Servers

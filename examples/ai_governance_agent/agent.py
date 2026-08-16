@@ -12,9 +12,8 @@ Demonstrates deepagent features:
 """
 
 from deepagents import create_deep_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from examples.config import settings
+from examples.config import create_gemini_model
 from examples.ai_governance_agent.prompts.prompts import (
     AI_GOVERNANCE_AGENT_INSTRUCTIONS,
     COMPLIANCE_ADVISOR_INSTRUCTIONS,
@@ -30,11 +29,7 @@ from examples.ai_governance_agent.tools.tools import (
 )
 
 # Initialize the language model
-model = ChatGoogleGenerativeAI(
-    model=settings.GOOGLE_MODEL_NAME,
-    temperature=settings.TEMPERATURE,
-    google_api_key=settings.GOOGLE_API_KEY,
-)
+model = create_gemini_model()
 
 # Define tools for AI governance assessment
 governance_tools = [

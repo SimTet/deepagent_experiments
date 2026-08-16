@@ -53,6 +53,26 @@ examples with a `langgraph.json` must be launched this way, from the repo root â
 uv run python -m examples.gemini_langgraph_agent.agent
 ```
 
+All other Python agents also offer a small command-line demo with a sensible default
+prompt. Run these commands from the repository root after configuring `.env`:
+
+```bash
+uv run python -m examples.simple_agent
+uv run python -m examples.research_agent
+uv run python -m examples.data_agent
+uv run python -m examples.requirements_agent
+uv run python -m examples.project_kickoff_agent
+uv run python -m examples.ai_governance_agent
+uv run python -m examples.ai_ideation_agent
+```
+
+These demos call the configured model and may use the agent's external tools. Use the
+test command below to verify graph construction without making API calls:
+
+```bash
+uv run python -m unittest discover -s tests -v
+```
+
 `gemini_mcp_agent` isn't a Python agent â€” see `examples/gemini_mcp_agent/README.md` for its
 `gemini-cli` + MCP setup.
 
