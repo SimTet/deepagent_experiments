@@ -15,7 +15,14 @@ from examples.research_agent.prompts.prompts import (
     RESEARCHER_INSTRUCTIONS,
     SUBAGENT_DELEGATION_INSTRUCTIONS,
 )
-from examples.research_agent.tools.tools import tavily_search, think_tool
+
+if not settings.TAVILY_API_KEY.strip():
+    raise ValueError(
+        "TAVILY_API_KEY is empty. Edit .env (copied from .env_example) and set a "
+        "real value for TAVILY_API_KEY — research_agent requires it for web search."
+    )
+
+from examples.research_agent.tools.tools import tavily_search, think_tool  # noqa: E402
 
 # Limits
 max_concurrent_research_units = settings.MAX_CONCURRENT_RESEARCH_UNITS

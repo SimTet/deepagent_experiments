@@ -1,4 +1,4 @@
-"""Utility functions for displaying messages and prompts in Jupyter notebooks."""
+"""Utility functions for displaying messages and prompts in CLI demo scripts."""
 
 import json
 import re
@@ -28,7 +28,7 @@ def extract_chart_path(text: str) -> tuple[str, Path | None]:
 
 
 def display_chart(chart_path: Path) -> None:
-    """Display a chart image in Jupyter notebook."""
+    """Display a chart image inline if running under IPython/Jupyter; no-op otherwise."""
     try:
         from IPython.display import Image, display
         display(Image(filename=str(chart_path)))
@@ -137,11 +137,6 @@ def format_messages(messages):
                 display_chart(chart_path)
         else:
             console.print(Panel(content, title=f"📝 {msg_type}", border_style="white"))
-
-
-def format_message(messages):
-    """Alias for format_messages for backward compatibility."""
-    return format_messages(messages)
 
 
 def show_prompt(prompt_text: str, title: str = "Prompt", border_style: str = "blue"):
