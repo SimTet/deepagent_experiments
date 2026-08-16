@@ -18,7 +18,7 @@ gemini --headless
 
 ## Token Flow
 
-See [scope_handling.md](/scope_handling.md) in the project root for the full token lifecycle, refresh strategy, and scope management guide.
+See [scope_handling.md](./scope_handling.md) for the full token lifecycle, refresh strategy, and scope management guide.
 
 ## Required Graph API Scopes
 

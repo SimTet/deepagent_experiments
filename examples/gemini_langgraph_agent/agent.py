@@ -5,9 +5,8 @@ This example demonstrates how to wrap the Gemini model in a LangGraph agent usin
 
 from deepagents import create_deep_agent
 from langchain_core.tools import tool
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from examples.config import settings
+from examples.config import create_gemini_model, settings
 
 
 # Define a simple tool
@@ -17,13 +16,9 @@ def get_agent_info() -> str:
     return "I am a LangGraph agent powered by Gemini, created by deepagents."
 
 
-# Initialize the Gemini model
-# Using the model name from settings, or defaulting to a specific one if needed
-model_name = "gemini-2.5-flash"  # Using a standard model name for stability, or could use settings.GOOGLE_MODEL_NAME
-if hasattr(settings, "GOOGLE_MODEL_NAME"):
-    model_name = settings.GOOGLE_MODEL_NAME
-
-model = ChatGoogleGenerativeAI(model=model_name, temperature=0)
+# Initialize the Gemini model through the shared, credential-explicit helper.
+model_name = settings.GOOGLE_MODEL_NAME
+model = create_gemini_model()
 
 # Create the deep agent (which returns a CompiledStateGraph)
 agent = create_deep_agent(

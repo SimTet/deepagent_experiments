@@ -18,9 +18,8 @@ Subagents:
 """
 
 from deepagents import create_deep_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from examples.config import settings
+from examples.config import create_gemini_model
 from examples.project_kickoff_agent.prompts.prompts import (
     ARCHITECT_INSTRUCTIONS,
     ORCHESTRATOR_INSTRUCTIONS,
@@ -33,10 +32,7 @@ from examples.project_kickoff_agent.tools.tools import (
 )
 
 # Initialize the language model
-model = ChatGoogleGenerativeAI(
-    model=settings.GOOGLE_MODEL_NAME,
-    temperature=settings.TEMPERATURE,
-)
+model = create_gemini_model()
 
 # Custom tools for the orchestrator
 orchestrator_tools = [get_deliverable_template, validate_project_plan]

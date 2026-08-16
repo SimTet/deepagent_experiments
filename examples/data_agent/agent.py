@@ -11,9 +11,8 @@ Demonstrates deepagent features:
 """
 
 from deepagents import create_deep_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from examples.config import settings
+from examples.config import create_gemini_model
 from examples.data_agent.prompts.prompts import (
     DATA_AGENT_INSTRUCTIONS,
     STATISTICIAN_INSTRUCTIONS,
@@ -26,10 +25,7 @@ from examples.data_agent.tools.tools import (
 )
 
 # Initialize the language model
-model = ChatGoogleGenerativeAI(
-    model=settings.GOOGLE_MODEL_NAME,
-    temperature=settings.TEMPERATURE,
-)
+model = create_gemini_model()
 
 # Define tools available to both main agent and subagent
 data_tools = [explore_schema, query_database, create_chart, analyze_data]

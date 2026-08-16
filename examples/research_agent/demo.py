@@ -33,9 +33,7 @@ def create_agent():
     from datetime import datetime
 
     from deepagents import create_deep_agent
-    from langchain_google_genai import ChatGoogleGenerativeAI
-
-    from examples.config import settings
+    from examples.config import create_gemini_model, settings
     from examples.research_agent.prompts.prompts import (
         RESEARCH_WORKFLOW_INSTRUCTIONS,
         RESEARCHER_INSTRUCTIONS,
@@ -70,9 +68,7 @@ def create_agent():
     show_prompt(instructions)
     console.print()
 
-    model = ChatGoogleGenerativeAI(
-        model=settings.GOOGLE_MODEL_NAME, temperature=settings.TEMPERATURE
-    )
+    model = create_gemini_model()
 
     research_sub_agent = {
         "name": "research-agent",

@@ -7,9 +7,8 @@ for conducting web research with strategic thinking and context management.
 from datetime import datetime
 
 from deepagents import create_deep_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from examples.config import settings
+from examples.config import create_gemini_model, settings
 from examples.research_agent.prompts.prompts import (
     RESEARCH_WORKFLOW_INSTRUCTIONS,
     RESEARCHER_INSTRUCTIONS,
@@ -44,7 +43,7 @@ INSTRUCTIONS = (
 )
 
 # Initialize the language model
-model = ChatGoogleGenerativeAI(model=settings.GOOGLE_MODEL_NAME, temperature=settings.TEMPERATURE)
+model = create_gemini_model()
 
 # Create research sub-agent
 research_sub_agent = {

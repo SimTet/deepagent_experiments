@@ -29,9 +29,7 @@ console = Console()
 def create_agent():
     """Create and return the simple agent."""
     from deepagents import create_deep_agent
-    from langchain_google_genai import ChatGoogleGenerativeAI
-
-    from examples.config import settings
+    from examples.config import create_gemini_model
     from examples.simple_agent.prompts.prompts import SIMPLE_AGENT_INSTRUCTIONS
     from examples.simple_agent.tools.tools import (
         divide_floats,
@@ -50,9 +48,7 @@ def create_agent():
     show_prompt(SIMPLE_AGENT_INSTRUCTIONS)
     console.print()
 
-    model = ChatGoogleGenerativeAI(
-        model=settings.GOOGLE_MODEL_NAME, temperature=settings.TEMPERATURE
-    )
+    model = create_gemini_model()
     agent = create_deep_agent(
         model=model,
         tools=tools,
