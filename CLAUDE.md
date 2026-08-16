@@ -20,14 +20,11 @@ cp .env_example .env
 
 ### Running Agents
 
-Agents can be run via:
-1. **Jupyter notebooks** - Each agent has an `agent_demo.ipynb` in its directory
-2. **LangGraph CLI** - Each agent directory contains a `langgraph.json` for deployment
+Each agent directory contains a `langgraph.json` for deployment via the LangGraph CLI:
 
 ```bash
-# Run with LangGraph CLI (example for simple_agent)
-cd examples/simple_agent
-langgraph dev
+# Run with LangGraph CLI (example for simple_agent), from the repo root
+langgraph dev --config examples/simple_agent/langgraph.json
 ```
 
 ## Architecture
@@ -39,7 +36,6 @@ Each agent in `examples/` follows this structure:
 examples/<agent_name>/
 ├── agent.py           # Main agent definition using create_deep_agent()
 ├── langgraph.json     # LangGraph deployment config
-├── agent_demo.ipynb   # Interactive demo notebook
 ├── prompts/
 │   └── prompts.py     # System prompts and instructions
 └── tools/
