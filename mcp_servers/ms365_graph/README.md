@@ -98,7 +98,7 @@ On startup, the server decodes the JWT access token's `scp` claim and disables a
 
 Example: a token with only `Mail.Read Calendars.Read User.Read` will have 37 tools disabled, leaving only the 11 read-only mail/calendar/user tools available.
 
-See [scope_handling.md](/scope_handling.md) in the project root for the full token lifecycle, refresh strategy, and architecture guide.
+See [scope_handling.md](../../examples/gemini_mcp_agent/scope_handling.md) for the full token lifecycle, refresh strategy, and architecture guide.
 
 ## Architecture
 
